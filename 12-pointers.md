@@ -16,8 +16,8 @@ A **pointer** is like a **note that says where something lives** in memory. Inst
 
 ## Address and value
 
-- **`&variable`** – “address of” the variable. Gives you a **pointer** to it.
-- **`*pointer`** – “value at” that address. Gives you the value the pointer points to (this is called **dereferencing**).
+- **`&variable`** – “Where does this variable live?” It gives you the **address** (a pointer) so you can find that variable later.
+- **`*pointer`** – “What's stored at that address?” It gives you the **actual value** there. Following the pointer to get the value is called **dereferencing**.
 
 ```go
 package main
@@ -33,6 +33,10 @@ func main() {
     fmt.Println(x) // 20 (x changed!)
 }
 ```
+
+- **`*p` on the right side** (e.g. `x := *p` or `fmt.Println(*p)`) → you're **dereferencing**: reading the value at that address.
+
+- **`*p` on the left side** (e.g. `*p = 20`) → you're **changing** the value that the pointer points to.
 
 So: **`&`** takes the address, **`*`** reads or writes the value at that address.
 
@@ -58,6 +62,8 @@ func main() {
 }
 ```
 
+**Why `p *int` and not `*p int`?** In Go, a parameter is always **name** then **type**. So `p` is the **name** of the parameter (the variable that holds the pointer), and **`*int`** is the **type** (pointer to int). We're declaring "a variable called `p` of type pointer-to-int." Inside the function we then use **`*p`** to dereference and read or change the value.
+
 So: **`addOne(&x)`** passes the **address** of **x**. Inside **addOne**, **`*p`** is the value at that address, and **`*p = *p + 1`** changes **x** itself.
 
 ---
@@ -70,6 +76,19 @@ The type of a pointer to an `int` is **`*int`**. So “pointer to int.”
 var p *int   // p is a pointer to an int
 var q *string // q is a pointer to a string
 ```
+
+**Why not `var x *int = 10`?** A **`*int`** holds an **address** (a pointer), not an integer. So you can't assign the number `10` to it — that would be like putting a house number inside an envelope that's meant to hold the address of the house. To have a pointer that “points to” the value 10, do one of these:
+
+- **Option 1:** Create an int, then take its address:
+
+  ```go
+  x := 10
+  var p *int = &x   // p is a pointer to x (p holds x's address)
+  ```
+
+  **Same thing, two styles:** Earlier we used `p := &x` (Go infers that `p` is `*int`). Here we wrote **`var p *int = &x`** so the type is explicit. Both are correct; use whichever you prefer.
+
+- **Option 2:** Create a pointer with **`new`**, then set the value: `p := new(int)` then `*p = 10`.
 
 ---
 
