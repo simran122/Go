@@ -4,6 +4,10 @@
 
 The **`sync`** package helps you **coordinate** goroutines (make them work together safely): **Mutex** (lock) for safe access to shared data, and **WaitGroup** for waiting until goroutines finish. Everything is in simple language.
 
+**What is `mu`?** **`mu`** is the **mutex** (the **lock**). Only one goroutine can hold the lock at a time. You call **`mu.Lock()`** before using shared data and **`mu.Unlock()`** when you are done. Others **wait** until the lock is released.
+
+**What is `wg`?** **`wg`** is the **WaitGroup** – a counter of “how many goroutines I am waiting for.” You call **`wg.Add(1)`** when you start a goroutine, **`wg.Done()`** when that goroutine finishes, and **`wg.Wait()`** to block until all have called **Done()**.
+
 **Concepts used in this page:** We use **goroutines** ([17-goroutines.md](17-goroutines.md)) and **defer** ([19-defer-panic-recover.md](19-defer-panic-recover.md)). Read those first if you haven’t.
 
 ---

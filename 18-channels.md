@@ -2,14 +2,16 @@
 
 **← [Back to INDEX](INDEX.md)**
 
-A **channel** is a way for **goroutines** to **send** and **receive** values. One goroutine sends a value into the channel; another goroutine receives it. Channels help you **synchronize** and **pass data** between concurrent code.
+A **channel** is like a **pipe** or **queue**: one **goroutine** puts a value in, another goroutine takes it out. Channels let goroutines **pass data** to each other and **wait for each other** (e.g. “wait until the other goroutine sends something”).
+
+**What is `ch`?** **`ch`** is the **channel** – the place where values are sent and received. People often use **ch** for “channel.” You **send** with **`ch <- value`** and **receive** with **`value := <-ch`**.
 
 ---
 
 ## Why use channels?
 
 - **Pass data** between goroutines (e.g. send results, tasks, or signals).
-- **Synchronize** – e.g. one goroutine waits until another sends a value.
+- **Wait for each other** – e.g. one goroutine waits until another sends a value.
 - **Safe** – Go makes sure only one goroutine uses a value at a time when it is sent/received.
 
 ---

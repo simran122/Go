@@ -17,6 +17,11 @@ The **`net/http`** package lets you build an **HTTP server** (e.g. a website or 
 
 ## Simple HTTP server
 
+**What is `w` and `r`?**  
+When someone visits your site, Go calls your **handler** with two arguments: **`w`** and **`r`**.  
+- **`w`** = **where to write the response**. Same idea as the **w** in **`fmt.Fprintf(w, ...)`** – whatever you write to **w** is sent back to the user’s browser. Type: **`http.ResponseWriter`**.  
+- **`r`** = **the request** – what the user asked for: the URL path, method (GET, POST), query params, headers, body, etc. Type: **`*http.Request`**.
+
 **`http.HandleFunc(path, handler)`** – when someone visits **path**, run **handler**.  
 **`http.ListenAndServe(addr, nil)`** – start the server on **addr** (e.g. **":8080"**).
 
@@ -30,10 +35,10 @@ import (
 
 func main() {
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf(w, "Hello, world!")
+        fmt.Fprintf(w, "Hello, world!")  // w = where the response goes (browser)
     })
     http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-        name := r.URL.Query().Get("name")
+        name := r.URL.Query().Get("name")  // r = the request (e.g. ?name=Alice)
         if name == "" {
             name = "Guest"
         }
@@ -43,8 +48,8 @@ func main() {
 }
 ```
 
-- **`w http.ResponseWriter`** – write the **response** here (e.g. **`fmt.Fprintf(w, "Hello")`**, **`w.Write([]byte("Hi"))`**).
-- **`r *http.Request`** – the **request**: **`r.URL.Path`** (path), **`r.Method`** (GET, POST), **`r.URL.Query()`** (query params), **`r.Header`** (headers).
+- **`w`** – write the **response** here: **`fmt.Fprintf(w, "Hello")`** or **`w.Write([]byte("Hi"))`**.
+- **`r`** – the **request**: **`r.URL.Path`** (path), **`r.Method`** (GET, POST), **`r.URL.Query()`** (query params), **`r.Header`** (headers).
 - **`:8080`** – listen on port **8080** on all interfaces.
 
 **Run:** open **http://localhost:8080** and **http://localhost:8080/hello?name=Alice** in a browser.
@@ -59,7 +64,7 @@ func main() {
 | **`r.Method`** | HTTP method (e.g. **"GET"**, **"POST"**) |
 | **`r.URL.Query()`** | Query params (e.g. **?name=Alice**); **`q.Get("name")`** |
 | **`r.Header.Get("Content-Type")`** | Request header |
-| **`r.Body`** | Request body (**io.Reader**); use **io.ReadAll(r.Body)** to read |
+| **`r.Body`** | Request body (where the data comes from); use **io.ReadAll(r.Body)** to read it all |
 
 ---
 
@@ -69,7 +74,7 @@ func main() {
 |--------|----------------|
 | **`w.WriteHeader(statusCode)`** | Set status (e.g. **200**, **404**, **500**). Call **before** writing body. |
 | **`w.Header().Set("Key", "Value")`** | Set response header |
-| **`w.Write(data)`** | Write body (**[]byte**) |
+| **`w.Write(data)`** | Write bytes to the response body |
 | **`fmt.Fprintf(w, ...)`** | Write formatted string to body |
 
 ```go
@@ -95,7 +100,11 @@ So **/static/style.css** serves **./static/style.css**.
 
 ## HTTP client: GET a URL
 
-**`http.Get(url)`** sends a **GET** request and returns **`(*http.Response, error)`**.
+**What is `resp`?** **`resp`** is the **response** from the server – status code, headers, and body. Type **`*http.Response`**.
+
+**What is `resp.Body`?** **`resp.Body`** is **where the response data comes from** – you read it like a file or a Reader. Use **`io.ReadAll(resp.Body)`** to read everything into **[]byte**. **Always** call **`defer resp.Body.Close()`** when you are done so the connection can be reused.
+
+**`http.Get(url)`** sends a **GET** request and returns the response and an error.
 
 ```go
 resp, err := http.Get("https://example.com")
@@ -112,7 +121,7 @@ fmt.Println(string(body))
 ```
 
 - **`resp.StatusCode`** – status (e.g. **200**, **404**).
-- **`resp.Body`** – body (**io.Reader**). **Always** **defer resp.Body.Close()**.
+- **`resp.Body`** – where the response data comes from; read with **io.ReadAll(resp.Body)**. **Always** **defer resp.Body.Close()**.
 - **`io.ReadAll(resp.Body)`** – read entire body into **[]byte**.
 
 ---

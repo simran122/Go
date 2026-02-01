@@ -4,6 +4,10 @@
 
 The **`net/url`** package lets you **parse** URLs into parts (scheme, host, path, query) and **build** or **encode** URLs. Everything is in simple language.
 
+**What is `u`?** **`u`** is the **parsed URL** – the parts of the URL (scheme, host, path, query). Type **`*url.URL`**. You get it from **`url.Parse(str)`**.
+
+**What is `q`?** **`q`** is the **query parameters** – the **?key=value** part of the URL. You get it from **`u.Query()`**. Use **`q.Get("key")`** to get the first value for a key.
+
 ---
 
 ## Why use net/url?

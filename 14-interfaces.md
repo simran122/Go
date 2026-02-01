@@ -2,7 +2,9 @@
 
 **← [Back to INDEX](INDEX.md)**
 
-An **interface** is like a **contract**: it only says *what* methods a type must have (names and shapes), not *how* they work. If your type has all those methods, it "implements" the interface. You can then use that type wherever the interface is expected. Everything below is in simple language.
+An **interface** is like a **contract**: it only says *what* methods a type must have (names and shapes), not *how* they work. If your type has **all** those methods, it **implements** the interface (we say “implements” = “has the right methods”). You can then use that type wherever the interface is expected. Everything below is in simple language.
+
+**What is `g` in the examples?** **`g`** is a variable that holds **any value that implements Greeter** – e.g. a **Person**. So **g** can hold different types; as long as they have **Greet() string**, you can assign them to **g** and call **g.Greet()**.
 
 **Concepts used in this page:** We use **structs** ([11-structs.md](11-structs.md)) and **methods** ([13-methods.md](13-methods.md)). Read those first if you haven’t.
 

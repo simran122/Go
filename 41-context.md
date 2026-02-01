@@ -2,7 +2,11 @@
 
 **← [Back to INDEX](INDEX.md)**
 
-The **`context`** package lets you **cancel** long-running work (e.g. HTTP request, goroutine) or give it a **timeout**. Many Go APIs accept **`context.Context`** as the first argument. Everything is in simple language.
+The **`context`** package lets you **stop** long-running work (e.g. an HTTP request or a goroutine) or give it a **time limit**. Many Go APIs take **`context.Context`** as the first argument. Everything is in simple language.
+
+**What is `ctx`?** **`ctx`** is the **context** – it carries a **signal to stop** (cancellation) and optionally a **timeout** or **deadline**. When you call **cancel()** (or when the time is up), **ctx** is “cancelled” and code that checks **ctx.Done()** sees it and can stop.
+
+**What is `cancel`?** **`cancel`** is a **function** you call when you want to **stop** the work. After you call **cancel()**, the context is cancelled and any goroutine waiting on **ctx.Done()** will see it. Always call **cancel()** when you are done (e.g. **defer cancel()**).
 
 **Concepts used in this page:** We use **goroutines** ([17-goroutines.md](17-goroutines.md)), **channels** ([18-channels.md](18-channels.md)), **defer** ([19-defer-panic-recover.md](19-defer-panic-recover.md)), and **select** ([18-channels.md](18-channels.md)). Read those first if you haven’t.
 
@@ -49,7 +53,7 @@ go func() {
 // later: cancel() to stop the goroutine
 ```
 
-- **`ctx.Done()`** – a **channel** that is **closed** when the context is cancelled. So **`<-ctx.Done()`** blocks until cancelled.
+- **`ctx.Done()`** – a **channel** that **closes** when the context is cancelled. So **`<-ctx.Done()`** means “wait until the stop signal is sent.”
 - **Always** call **cancel()** when you are done (e.g. **defer cancel()**) to release resources.
 
 ---

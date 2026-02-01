@@ -80,6 +80,8 @@ So you usually **synchronize**: wait for goroutines to finish (e.g. with channel
 
 ## Wait for goroutines: `sync.WaitGroup`
 
+**What is `wg`?** **`wg`** is the **WaitGroup** – a counter that says “how many goroutines I am waiting for.” You **Add(1)** when you start one, each goroutine **Done()** when it finishes, and **Wait()** blocks until the count is 0 (all done).
+
 A **WaitGroup** lets you wait until a **fixed number** of goroutines have finished. You **add** the count, each goroutine **calls Done()** when it finishes, and you **Wait()** until all are done.
 
 ```go

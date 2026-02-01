@@ -40,7 +40,9 @@ func main() {
 
 ## Turn JSON → Go (Unmarshal)
 
-**`json.Unmarshal(jsonBytes, &value)`** fills a Go variable from JSON. You pass a **pointer** so the function can fill it.
+**What is `&p`?** **`&p`** is the **address** of **p**. We pass a **pointer** so **Unmarshal** can **write into** **p**. If we passed **p** (not **&p**), the function would get a copy and could not change **p**; with **&p**, it fills **p** with the data from the JSON.
+
+**`json.Unmarshal(jsonBytes, &value)`** fills a Go variable from JSON. You pass a **pointer** (**&value**) so the function can fill it.
 
 ```go
 package main

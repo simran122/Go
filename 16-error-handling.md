@@ -49,6 +49,8 @@ func main() {
 
 ## Checking the error
 
+**What is `err`?** **`err`** is the **error** returned by the function. If something went wrong, **err** is not **nil** (it holds the error message). If everything is fine, **err** is **nil** (“no error”). So you check **`if err != nil`** and then handle it (log, return, or exit).
+
 After calling a function that returns an error, **always check** it. The usual pattern:
 
 ```go

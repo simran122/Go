@@ -75,6 +75,10 @@ When you need **more control** (read/write in parts, or keep the file open), use
 
 ### Open for reading
 
+**What is `file`?** **`file`** is the **open file** – the place you read from. Type **`*os.File`**. When you are done, **close** it with **`file.Close()`** (or **`defer file.Close()`**).
+
+**What is `buf`?** **`buf`** is a **buffer** – a slice of bytes where **Read** puts the data. You create it with **`make([]byte, size)`** and then pass it to **`file.Read(buf)`**; **Read** fills **buf** and tells you how many bytes it read.
+
 **`os.Open(filename)`** opens the file for **reading**. You get an **`*os.File`**. When you are done, **close** it with **`file.Close()`** (or use **`defer file.Close()`**).
 
 ```go
@@ -106,7 +110,7 @@ func main() {
 ```
 
 - **`file.Read(buf)`** reads into **`buf`** and returns how many bytes were read (**`n`**) and an error.
-- **`io.EOF`** means “end of file” – no more data. It is normal when you finish reading.
+- **`io.EOF`** means **“end of file”** – there is no more data to read. It is normal when you finish reading the file.
 
 ### Create for writing
 
@@ -122,7 +126,7 @@ defer file.Close()
 file.Write([]byte("Hello, world!\n"))
 ```
 
-- **`file.Write(data)`** writes **`[]byte`** to the file.
+- **`file.Write(data)`** writes bytes to the file. **data** is **`[]byte`** (e.g. **`[]byte("Hello")`**).
 
 ---
 

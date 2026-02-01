@@ -42,6 +42,10 @@ func main() {
     var a int32 = 100
     b := int64(a)
     fmt.Println(b)  // 100
+
+    // Literal or int to int64 (e.g. for time.UnixMilli)
+    msFromEpoch := int64(1738312200123)
+    _ = msFromEpoch  // many APIs expect int64, not int
 }
 ```
 
@@ -138,6 +142,24 @@ fmt.Println(s)
 
 ---
 
+## When a function expects a specific type
+
+Some functions take a **specific** type (e.g. **`int64`**). If you have an **`int`**, a **literal**, or data from JSON, convert it first:
+
+```go
+// Example: time.UnixMilli(ms) expects int64
+ms := 1738312200123   // untyped or int
+ms64 := int64(ms)     // convert so you can pass it to time.UnixMilli(ms64)
+
+// Same idea: int32 → int64, or literal → int64
+var x int32 = 100
+y := int64(x)
+```
+
+Use **`Type(value)`** whenever the function or API expects that type and you have another compatible type.
+
+---
+
 ## What you cannot do
 
 - You **cannot** convert **bool** to **int** or **string** with **`int(b)`** or **`string(b)`** in a useful way. Use **if** or **strconv** (e.g. **`strconv.FormatBool`**) instead.
@@ -150,6 +172,7 @@ fmt.Println(s)
 | Conversion | How |
 |------------|-----|
 | int ↔ float64 | `float64(i)`, `int(f)` (truncates) |
+| int / literal → int64 | `int64(value)` (e.g. for `time.UnixMilli`) |
 | int → string (digits) | `strconv.Itoa(n)` |
 | string → int | `strconv.Atoi(s)` (returns value, error) |
 | string → float64 | `strconv.ParseFloat(s, 64)` |
